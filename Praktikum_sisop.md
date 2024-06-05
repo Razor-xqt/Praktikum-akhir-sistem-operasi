@@ -319,7 +319,7 @@ note: jika menggunakan virtual box tambahkan disk di setting tambahkan 2 disk be
    - Tambahkan dan gunakan jarak spasi menggunakan **tab**
    ```
    /dev/sdb1  /var/www/html  ext4  defaults  0  2
-   /dev/sdc1  /mnt/backup  ext4  defaults  0  
+   /dev/sdc1  /mnt/backup  ext4  defaults  0  2
    ```
 7. **Verifikasi mount:**
    
