@@ -305,7 +305,7 @@ Seharusnya, ketika alamat IP dibuka pada web browser akan sudah tertampil websit
    cd /var/www/html
    ```
 
-  - masuk ke https://github.com/Rizqirazkafi/testing-website/blob/index.php dan copy index.php
+  - masuk ke https://github.com/Rizqirazkafi/testing-website dan copy index.php
   - pastekan disini
    ```bash
    sudo nano index.php
