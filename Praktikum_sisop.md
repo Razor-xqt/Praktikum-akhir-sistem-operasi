@@ -17,7 +17,7 @@
    sudo nano /etc/ssh/sshd_config
    ```
 
-- lalu ubah port delfault 22 menjadi 9005 dan hapus tanda pagarnya:
+   - lalu ubah port delfault 22 menjadi 9005 dan hapus tanda pagarnya:
   
    ```
    Port 9005
@@ -30,14 +30,14 @@
 
 4. **Cek Ping dan Ping server:**
    
-- Cek ip (pilih salah satu)
+   - Cek ip (pilih salah satu)
    ```bash
    ifconfig
    hostname I 
    ip a
    ```
 
-- Uji ping
+   - Uji ping
    ```bash
    ping ipadress_server
    ```
@@ -48,12 +48,12 @@
    ssh -p 9005 userr@ipadressserver_or_hostname
    ```
 
-- Untuk cek status server:
+   - Untuk cek status server:
    ```bash
    sudo service ssh status
    ```
 
-- Jika 'failed' maka aktifkan server dengan perintah berikut:
+   - Jika 'failed' maka aktifkan server dengan perintah berikut:
    ```bash
    sudo service ssh start
    ```
@@ -64,7 +64,7 @@
    ssh-keygen -t rsa -b 4096
    ```
    
-- Masuk ke directory ssh dan liat menggunakan ls
+   - Masuk ke directory ssh dan liat menggunakan ls
   
    ```shell
    cd .ssh
@@ -72,39 +72,39 @@
 
 7. **Copy public key ke ssh server buka menggunakan cat dan copy:**
 
-- Buka public key di lokal komputer dan copy
+   - Buka public key di lokal komputer dan copy
    ```shell
    cat ~/.ssh/id_rsa.pub
    ```
 
-- Masuk ke ssh server
+   - Masuk ke ssh server
    ```shell
    ssh -p 9005 user@ipadress
    ```
    
-1. **Buat direktori ~/.ssh dan copy ke     authorized keys:**
+8. **Buat direktori ~/.ssh dan copy ke     authorized keys:**
    
    ```bash
    mkdir -p ~/.ssh
    nano ~/.ssh/authorized_keys
    ```
 
-2.   **Masuk lagi ke konfig dan ubah passwordAuthentication:**
+9.   **Masuk lagi ke konfig dan ubah passwordAuthentication:**
     
-- Masuk ke konfig
+   - Masuk ke konfig
    ```bash
    sudo nano /etc/ssh/sshd_config
    ```
 
-- Hapus pagar dan ubah ke passwordAuthentication yes ke no
+   - Hapus pagar dan ubah ke passwordAuthentication yes ke no
    ```
    pubkeyAuthentication yes
    passwordAuthentication no
    ```
 
-11.  **Coba masuk lagi:**
+10.  **Coba masuk lagi:**
 
-- Masuk ke server menggunakan ssh atau remote os
+   - Masuk ke server menggunakan ssh atau remote os
    ```bash
    ssh -p 9005 user@ipadress_or_hostname
    ```
@@ -153,11 +153,11 @@
 
 4. **Edit konfigurasi ssh:**
    
-- Masuk ke sshd_config
+   - Masuk ke sshd_config
    ```bash
    sudo /etc/ssh/sshd_config
    ```
-- tambahkan konfigurasi ini dipaling bawah:
+   - tambahkan konfigurasi ini dipaling bawah:
    ```
    Match User guest
       ChrootDirectory /home
@@ -250,14 +250,14 @@
    sudo nano /etc/nginx/sites-available/default
    ```
 
-- Edit config menjadi seperti berikut
+   - Edit config menjadi seperti berikut
 
-   - Add index.php to the index list.
-   - Uncomment the PHP scripts to FastCGI entry block.
-   - Uncomment the line to include snippets/fastcgi-php.conf.
-   - Uncomment the line to enable the fastcgi_pass and the php8.1-fpm. sock.
-   - Uncomment the section to deny all access to Apache .htaccess files.
-   ![alt text](config.mp4)
+     - Add index.php to the index list.
+     - Uncomment the PHP scripts to FastCGI entry block.
+     - Uncomment the line to include snippets/fastcgi-php.conf.
+     - Uncomment the line to enable the fastcgi_pass and the php8.1-fpm. sock.
+     - Uncomment the section to deny all access to Apache .htaccess files.
+      ![alt text](config.mp4)
 
 2. **Restart nginx**
    
@@ -387,7 +387,7 @@ Seharusnya, ketika alamat IP dibuka pada web browser akan sudah tertampil websit
    
    github.com/Rizkirazkafi/testing-website
 
-- Edit file php dan tambahkan (paste)
+   - Edit file php dan tambahkan (paste)
   
   ```bash
   sudo gedit index.php
@@ -453,10 +453,10 @@ note: jika menggunakan virtual box tambahkan disk di setting tambahkan 2 disk be
    sudo cfdisk /dev/sdc
    ```
 
-- pilih gpt
-- pilih new dan klik enter
-- pilih opsi write dan klik enter
-- jika selesai pilih opsi quit lau enter
+   - pilih gpt
+   - pilih new dan klik enter
+   - pilih opsi write dan klik enter
+   - jika selesai pilih opsi quit lau enter
   
 3. **Memformat dengan ext4 dan melabelkan disk dengan 'main' dan 'backup':**
    
@@ -500,48 +500,48 @@ note: jika menggunakan virtual box tambahkan disk di setting tambahkan 2 disk be
 
 8. **Buatlah Automatisasi Backup dengan cara:**
    
-- Buat script Backup
+   - Buat script Backup
    ```bash
    sudo nano /usr/local/bin/backup.sh
    ```
 
-- Tambahkan baris berikut
+   - Tambahkan baris berikut
    ```
    #!/bin/bash
    rsync -av --delete /var/www/html/ /mnt/backup/ &>> /var/log/backup.sh
    ```
    
-- Simpan dan tutup file, lalu buat skrip dapat dieksekusi: 
+   - Simpan dan tutup file, lalu buat skrip dapat dieksekusi: 
    ```bash
    sudo chmod +x /usr/local/bin/backup.sh
    ```
 
-- Menjalankan Script Secara Manual  : 
+   - Menjalankan Script Secara Manual  : 
   ```bash
   sudo /usr/local/bin/backup.sh
   ```
 
-- Memeriksa Log Backup:
+   - Memeriksa Log Backup:
   ```bash
   sudo cat /var/log/backup.sh
   ```
 
-- Menjalankan Script Backup dengan automatis menggunakan Cron job (opsional)
+   - Menjalankan Script Backup dengan automatis menggunakan Cron job (opsional)
   ```bash
   sudo crontab -e
   ```
 
-- contoh:  baris berikut untuk menjalankan backup setiap hari pada jam 2 pagi: (opsional)
+   - contoh:  baris berikut untuk menjalankan backup setiap hari pada jam 2 pagi: (opsional)
   ```bash
   0 2 * * * /usr/local/bin/backup.sh
   ```
 
-- Cek dan verifikasi data  di dr backup
+   - Cek dan verifikasi data  di dr backup
   ```bash
   ls /mnt/backup
   ```
 
-- jika index.php hilang tambahkan lagi pada /var/www/html/
+   - jika index.php hilang tambahkan lagi pada /var/www/html/
   
    ```bash
    cd /var/www/html
@@ -553,7 +553,7 @@ note: jika menggunakan virtual box tambahkan disk di setting tambahkan 2 disk be
 
 **Jika gagal gunakan perintah ini untuk menghapus partisi:**
     
--  Sebelum itu unmount terlebih  dahulu
+   -  Sebelum itu unmount terlebih  dahulu
 
    ```bash
    sudo umount /dev/sdb <direktori mount>
@@ -565,5 +565,5 @@ note: jika menggunakan virtual box tambahkan disk di setting tambahkan 2 disk be
    sudo fdisk /dev/sdc
    ```
 
-- tekan 'd' lalu enter untuk menghapus partisi
-- tekan 'w' lalu enter untuk write dan keluar
+   - tekan 'd' lalu enter untuk menghapus partisi
+   - tekan 'w' lalu enter untuk write dan keluar
