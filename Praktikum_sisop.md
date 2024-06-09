@@ -564,9 +564,3 @@ note: jika menggunakan virtual box tambahkan disk di setting tambahkan 2 disk be
 
 - tekan 'd' lalu enter untuk menghapus partisi
 - tekan 'w' lalu enter untuk write dan keluar
-
-
-
-
-
-   
