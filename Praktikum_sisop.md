@@ -19,7 +19,7 @@
 
 - lalu ubah port delfault 22 menjadi 9005 hapus tanda pagarnya
   
-   ```bash
+   ```
    Port 9005
    ```
    
@@ -33,9 +33,8 @@
 - Cek ip (pilih salah satu)
    ```bash
    ifconfig
-   hostname I
-   ip addr 
-   ip -a
+   hostname I 
+   ip a
    ```
 
 - Uji ping
@@ -188,7 +187,7 @@
    
    ```bash
    cd /home/guest/home/guest
-   touch testfile
+   touch test.txt
    ls
    ```
 
@@ -249,7 +248,7 @@
    ```bash
    cd etc/apache2
    sudo nano ports.conf
-   listen 80 **ubah ke** 9005
+   listen 80
    sudo service apache2 restart
    ```
 
