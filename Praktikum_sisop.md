@@ -8,7 +8,7 @@
    
    ```bash
    sudo apt update
-   sudo apt install openssh-server
+   sudo apt-get install openssh-server
    ```
 
 2. **Konfigurasi SSH untuk menggunakan port 9005:**
@@ -17,7 +17,7 @@
    sudo nano /etc/ssh/sshd_config
    ```
 
-- lalu ubah port delfault 22 menjadi 9005 hapus tanda pagarnya
+- lalu ubah port delfault 22 menjadi 9005 dan hapus tanda pagarnya:
   
    ```
    Port 9005
@@ -39,21 +39,21 @@
 
 - Uji ping
    ```bash
-   ping <ipadressserver>
+   ping ipadress_server
    ```
    
 5. **Coba Masuk ke Server:**
    
-   ```bash
+   ```shell
    ssh -p 9005 userr@ipadressserver_or_hostname
    ```
 
-- Untuk cek server telah hidup
+- Untuk cek status server:
    ```bash
    sudo service ssh status
    ```
 
-- Jika belum hidup
+- Jika 'failed' maka aktifkan server dengan perintah berikut:
    ```bash
    sudo service ssh start
    ```
@@ -71,7 +71,7 @@
    ```
 
 7. **Copy public key ke ssh server buka menggunakan cat dan copy:**
-8. 
+
 - Buka public key di lokal komputer dan copy
    ```shell
    cat ~/.ssh/id_rsa.pub
@@ -82,26 +82,14 @@
    ssh -p 9005 user@ipadress
    ```
    
-8. **Buat direktori ~/.ssh dan copy ke     authorized keys:**
+1. **Buat direktori ~/.ssh dan copy ke     authorized keys:**
    
    ```bash
    mkdir -p ~/.ssh
    nano ~/.ssh/authorized_keys
    ```
 
-9.  **Setel izin ssh authorized keys:**
-
-- Setel izin menggunakan chmod
-  (untuk baca, tulius dan eksekusi)
-   ```bash
-   chmod 700 ~/.ssh 
-   ```
--  (untuk baca dan tulis)
-   ```bash
-   chmod 600 ~/.ssh/authorized_keys
-   ```
-
-10.  **Masuk lagi ke konfig dan ubah passwordAuthentication:**
+2.   **Masuk lagi ke konfig dan ubah passwordAuthentication:**
     
 - Masuk ke konfig
    ```bash
@@ -110,6 +98,7 @@
 
 - Hapus pagar dan ubah ke passwordAuthentication yes ke no
    ```
+   pubkeyAuthentication yes
    passwordAuthentication no
    ```
 
@@ -128,19 +117,33 @@
    ```bash
    sudo adduser guest
    ```
-2. **cek user**
+2. **Cek user**
    ```bash
    cat etc/passwd
    ```
 
-3. **Buat file 'guest', setting kepemilikan ke guest dan izin directory:**
+3. **Buat file 'guest', setting kepemilikan ke guest, dan lakukan ACL (*Access Control List*) pada user guest:**
    
    ```bash
    sudo mkdir /home/guest
    sudo chown guest:guest /home/guest
-   sudo chmod 755 /home/guest
+   sudo chmod 750 /home/guest
    ```
-   - cek perizinan di
+  **ACL (Access Control List)**
+   formatnya d(---)(---)(---)
+   |Owner|Group|Other|
+   |-----|-----|-----|
+   |rwx|rwx|rwx|
+   |4+2+1|4+2+1|4+2+1|
+   
+   4 = read
+   2 = write
+   1 = excecution
+   contoh : sudo chmod 745
+   berarti d(rwx)(r--)(r-x)
+
+
+   - Cek perizinan di
    ```bash
    ll
    ```
@@ -149,12 +152,6 @@
    ls -ld 
    ```
 
-   drwxrwxrwx --> formatnya d(---)(---)(---)
-   |Owner|Group|Other|
-   |-----|-----|-----|
-   |rwx|rwx|rwx|
-   |4+2+1|4+2+1|4+2+1|
-
 4. **Edit konfigurasi ssh:**
    
 - Masuk ke sshd_config
@@ -162,49 +159,176 @@
    sudo /etc/ssh/sshd_config
    ```
 
-- Tambahkan ini ke paling bawah
-   ```
-   Match User guest
-      ChrootDirectory /home
-      AllowTcpForwarding no
-      X11Forwarding no
-   ```
-   - AllowTcpForwarding no Dan X11Forwarding no: Menonaktifkan penerusan TCP dan X11 untuk keamanan tambahan. 
-
-5. **Restart ssh:**
+6. **Restart ssh:**
    
    ```bash
    sudo systemctl restart ssh
    ```
 
-6. **Verifikasi status ssh:**
+7. **Verifikasi status ssh:**
    
    ```bash
-   sudo service ssh status
+   sudo systemctl status ssh
    ```
 
-7. **Tes akses direktori home dan guest:**
+3. **Tes akses direktori home dan guest:**
    
    ```bash
    cd /home/guest
-   touch test.txt
+   nano test.txt
    ls
    ```
-8. **Tes akses diluar direktori home:**
-   
+4.  **Tes akses diluar direktori home:**
+   misal kita test ke folder
    ```bash
-   cd ../.. atau cd /
+   cd /media
+   nano
    ```
-   masuk ke folder var atau yang lain selain folder direktori guest
-   
-   ``` bash
-   cd var
-   touch test.txt
+   jika tulisan *unwritable* maka perizinan telah berhasil
+
+## Langkah 4: Setup Web Server dengan HTTPS (pilih salah satu web server)
+
+### WEB SERVER NGINX
+**Instalasi Webserver**
+
+1. Install Webserver
+   ```bash
+   sudo apt install nginx
+   ```
+2. Start nginx
+   ```bash
+   sudo systemctl start nginx
+   ```
+3. Check nginx
+   ```bash
+   sudo systemctl status nginx
+   ```
+4. Seharusnya terdapat status active (running)
+   ![alt text](image.png)
+   Dan jika diakses alamat ip nya akan ada website yang muncul
+   ![alt text](image-1.png)
+
+
+Instalasi PHP
+
+5. Install PHP FPM 8.1
+   ```bash
+    sudo apt install php8.1-fpm
+   ```
+6. Check PHP Status
+   ```bash
+    sudo systemctl status php8.1-fpm
+   ```
+![alt text](image-2.png)
+
+Setup PHP pada nginx
+
+7. Buka config nginx
+   ```bash
+   sudo nano /etc/nginx/sites-available/default
+   ```
+- Edit config menjadi seperti berikut
+
+   - Add index.php to the index list.
+   - Uncomment the PHP scripts to FastCGI entry block.
+   - Uncomment the line to include snippets/fastcgi-php.conf.
+   - Uncomment the line to enable the fastcgi_pass and the php8.1-fpm. sock.
+   - Uncomment the section to deny all access to Apache .htaccess files.
+   ![alt text](config.mp4)
+
+8. Restart nginx
+   ```bash
+   sudo systemctl restart nginx
+   ```
+9. Test PHP
+
+   - Buat file PHP baru
+
+   - sudo nano /var/www/html/info.php
+
+   - Pastekan script berikut
+   ```bash
+   <?php phpinfo(); ?>
+   ```
+   - Buka pada web browser <IP ADDRESS>/info.php
+
+   - Seharusnya akan tampil informasi PHP yang berjalan
+   ![alt text](image-3.png)
+
+Setup Web Demo
+
+10. Mendapatkan index.php ke html menggunakan git
+   ```bash
+   sudo apt install git
+   ```
+   - Clone repository
+   ```bash
+    git clone https://github.com/Rizqirazkafi/testing-website.git
+   ```
+   - Pindahkan index.php ke folder /var/www/html/
+
+   - sudo mv testing-website/index.php /var/www/html/
+
+Seharusnya, ketika alamat IP dibuka pada web browser akan sudah tertampil website demonya
+
+- Cara 2
+   ```bash
+   cd /var/www/html
+   ```
+  - masuk ke https://github.com/Rizqirazkafi/testing-website/blob/index.php dan copy index.php
+  - pastekan disini
+   ```bash
+   sudo nano index.php
    ```
 
-   jika tidak bisa, tes akses diluar dirktori guest telah berhasil.
-   
-## Langkah 4: Setup Web Server dengan HTTPS
+Setup SSL
+
+11. Install mkcert
+   ```bash
+   sudo apt install mkcert
+   ```
+12. Buat certificate untuk localhost
+   ```bash
+   mkcert localhost
+   ```
+13. Pindahkan certificate dan key
+   ```bash
+   sudo mv localhost.pem /etc/ssl/certs
+   sudo mv localhost-key.pem /etc/ssl/private
+   ```
+14. Konfigurasi nginx
+
+   - Buka file konfigurasi nginx
+      ```bash
+      sudo nano /etc/nginx/sites-available/default
+      ```
+   - Tambahkan config berikut
+      ```
+      listen 443 ssl default_server;
+      listen [::]:443 ssl default_server;
+      ssl_certificate /etc/ssl/certs/localhost.pem;
+      ssl_certificate_key /etc/ssl/private/localhost-key.pem;
+      ```
+   ![alt text](image-4.png)
+
+15. Restart nginx
+   ```bash
+   sudo systemctl restart nginx
+   ```
+
+16. Buka alamat IP pada web browser dengan menambahkan https
+   - ex: https://<IP ADDRESS>
+
+   - Jika terdapat pesan warning, pilih advance kemudian pilih proceed to
+
+   - Kita menggunakan self-signed SSL, sehingga akan tampil warning tersebut
+
+   ![alt text](image-5.png)
+
+17. Web sudah berjalan pada protokol https
+   ![alt text](image-6.png)
+
+### WEB SERVER APACHE2
 
 1. **install apache2:**
    
@@ -213,21 +337,21 @@
    sudo systemctl status apache2
    ```
    
-2. **Masuk ke dir index.html:**
+19. **Masuk ke dir index.html:**
    
    ```bash
    cd /var/www/html/
    ls
    ```
 
-3. **Test website html dengan local host:**
+20. **Test website html dengan local host:**
    
    ```bash
    firefox index.html
    ```
    https://index.html (ubah menjadi) 127.0.0.1/index.html
 
-4. **Ambil (copy) Website php:**
+21. **Ambil (copy) Website php:**
    
    github.com/Rizkirazkafi/testing-website
 
@@ -237,26 +361,26 @@
   sudo gedit index.php
   ```
 
-1. **Test website php dengan local host:**
+5. **Test website php dengan local host:**
    
    ```bash
    firefox index.php
    ```
    https://index.php (ubah menjadi) 127.0.0.1/index.php
 
-2. **Instal nmap (opsional):**
+6. **Instal nmap (opsional):**
    ```bash
    sudo apt-get update
    sudo apt-get install nmap
    ```
 
-3. **Cek port (opsional):**
+7. **Cek port (opsional):**
    
    ```bash
    nmap localhost
    ```
 
-4. **Ganti port web server tidak boleh sama dengan port ssh jadi biarkan saja port 80:**
+8. **Port web server tidak boleh sama dengan port ssh jadi biarkan saja port 80:**
     
    ```bash
    cd etc/apache2
@@ -265,7 +389,7 @@
    sudo service apache2 restart
    ```
 
-5.  **Cek lagi menggunakan ipadrees server**
+9.  **Cek lagi menggunakan ipadrees server**
     
    ```bash
    cd /var/www/html
@@ -383,6 +507,13 @@ note: jika menggunakan virtual box tambahkan disk di setting tambahkan 2 disk be
   ```
 
 9. **Jika gagal gunakan perintah ini untuk menghapus partisi:**
+    
+-  Sebelum itu unmount terlebih  dahulu
+
+   ```bash
+   sudo umount /dev/sdb <direktori mount>
+   sudo umount /dev/sdc <direktori mount>
+   ```
    
    ```bash
    sudo fdisk /dev/sdb
@@ -392,12 +523,7 @@ note: jika menggunakan virtual box tambahkan disk di setting tambahkan 2 disk be
 - tekan 'd' lalu enter untuk menghapus partisi
 - tekan 'w' lalu enter untuk write dan keluar
 
--  Sebelum itu unmount terlebih  dahulu
 
-   ```bash
-   sudo umount /dev/sdb <direktori mount>
-   sudo umount /dev/sdc <direktori mount>
-   ```
 
 
 
