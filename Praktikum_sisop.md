@@ -188,7 +188,7 @@
 
 ## Langkah 4: Setup Web Server dengan HTTPS (pilih salah satu web server)
 
-### WEB SERVER NGINX
+### A. WEB SERVER NGINX
 **Instalasi Webserver**
 
 1. **Install Webserver**
@@ -354,7 +354,7 @@ Seharusnya, ketika alamat IP dibuka pada web browser akan sudah tertampil websit
 17.** Web sudah berjalan pada protokol https**
    ![alt text](image-6.png)
 
-### WEB SERVER APACHE2
+### B. WEB SERVER APACHE2 (masih perkembangan untuk ssl)
 
 1. **install apache2:**
    
@@ -363,21 +363,21 @@ Seharusnya, ketika alamat IP dibuka pada web browser akan sudah tertampil websit
    sudo systemctl status apache2
    ```
    
-19. **Masuk ke dir index.html:**
+2. **Masuk ke dir index.html:**
    
    ```bash
    cd /var/www/html/
    ls
    ```
 
-20. **Test website html dengan local host:**
+3. **Test website html dengan local host**
    
    ```bash
    firefox index.html
    ```
    https://index.html (ubah menjadi) 127.0.0.1/index.html
 
-21. **Ambil (copy) Website php:**
+4. **Ambil (copy) Website php:**
    
    github.com/Rizkirazkafi/testing-website
 
@@ -433,7 +433,7 @@ Seharusnya, ketika alamat IP dibuka pada web browser akan sudah tertampil websit
    
 ## Langkah 5: Setup Storage Utama dan Backup Storage Server
 
-note: jika menggunakan virtual box tambahkan disk di setting tambahkan 2 disk berukuran 10gb
+note: jika menggunakan virtual box tambahkan disk di setting; Storage dan tambahkan 2 disk berukuran 5gb atau 10gb
 
 1. **Cek disk yang tersedia:**
    ```bash
