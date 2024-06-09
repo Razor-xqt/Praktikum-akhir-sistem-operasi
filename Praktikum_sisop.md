@@ -68,7 +68,7 @@
 - Masuk ke directory ssh dan liat menggunakan ls
   
    ```shell
-   cd ~/.ssh
+   cd .ssh
    ```
 
 7. **Copy public key ke ssh server buka menggunakan cat dan copy:**
@@ -211,7 +211,7 @@
 3. **Test website html dengan local host:**
    
    ```bash
-   firefox index.
+   firefox index.html
    ```
    https://index.html (ubah menjadi) 127.0.0.1/index.html
 
@@ -337,12 +337,12 @@ note: jika menggunakan virtual box tambahkan disk di setting tambahkan 2 disk be
 - Tambahkan baris berikut
    ```
    #!/bin/bash
-   rsync -av --delete /var/www/html/ /mnt/backup/ &>> /var/log/backup.
+   rsync -av --delete /var/www/html/ /mnt/backup/ &>> /var/log/backup.sh
    ```
    
 - Simpan dan tutup file, lalu buat skrip dapat dieksekusi: 
    ```bash
-   sudo chmod +x /usr/local/bin/backup.
+   sudo chmod +x /usr/local/bin/backup.sh
    ```
 
 - Menjalankan Script Secara Manual  : 
@@ -352,7 +352,7 @@ note: jika menggunakan virtual box tambahkan disk di setting tambahkan 2 disk be
 
 - Memeriksa Log Backup:
   ```bash
-  sudo cat /var/log/backup.
+  sudo cat /var/log/backup.sh
   ```
 
 - Menjalankan Script Backup dengan automatis menggunakan Cron job (opsional)
@@ -362,7 +362,7 @@ note: jika menggunakan virtual box tambahkan disk di setting tambahkan 2 disk be
 
 - contoh:  baris berikut untuk menjalankan backup setiap hari pada jam 2 pagi: (opsional)
   ```bash
-  0 2 * * * /usr/local/bin/backup.
+  0 2 * * * /usr/local/bin/backup.sh
   ```
 
 - Cek dan verifikasi data  di dr backup
