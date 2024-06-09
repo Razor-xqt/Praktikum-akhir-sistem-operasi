@@ -473,6 +473,9 @@ note: jika menggunakan virtual box tambahkan disk di setting tambahkan 2 disk be
    ```
 
 5. **Pasang Direktori dan Mount disk secara manual untuk memeriksa:**
+   - Untuk aplikasi web:  /var/www (tergantung pada konfigurasi server web seperti Apache atau Nginx). 
+   - Untuk basis data:  /var/lib/mysql untuk MySQL atau  /var/lib/postgresql untuk PostgreSQL. 
+   - Untuk penyimpanan umum:  /mnt/primer atau  /media/primer. 
    
    ```bash
    sudo mount /dev/sdb1 /var/www/html
