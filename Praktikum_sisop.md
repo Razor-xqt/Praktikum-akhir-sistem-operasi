@@ -183,14 +183,27 @@
    sudo service ssh status
    ```
 
-7. **Tes akses direktori home:**
+7. **Tes akses direktori home dan guest:**
    
    ```bash
-   cd /home/guest/home/guest
+   cd /home/guest
    touch test.txt
    ls
    ```
+8. **Tes akses diluar direktori home:**
+   
+   ```bash
+   cd ../.. atau cd /
+   ```
+   masuk ke folder var atau yang lain selain folder direktori guest
+   
+   ``` bash
+   cd var
+   touch test.txt
+   ```
 
+   jika tidak bisa, tes akses diluar dirktori guest telah berhasil.
+   
 ## Langkah 4: Setup Web Server dengan HTTPS
 
 1. **install apache2:**
