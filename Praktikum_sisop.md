@@ -191,42 +191,50 @@
 ### WEB SERVER NGINX
 **Instalasi Webserver**
 
-1. Install Webserver
+1. **Install Webserver**
+   
    ```bash
    sudo apt install nginx
    ```
-2. Start nginx
+2. **Start nginx**
+   
    ```bash
    sudo systemctl start nginx
    ```
-3. Check nginx
+3. **Check nginx**
+   
    ```bash
    sudo systemctl status nginx
    ```
-4. Seharusnya terdapat status active (running)
+4. **Seharusnya terdapat status active (running)**
    ![alt text](image.png)
    Dan jika diakses alamat ip nya akan ada website yang muncul
    ![alt text](image-1.png)
 
 
-Instalasi PHP
+**Instalasi PHP**
 
-5. Install PHP FPM 8.1
+5. **Install PHP FPM 8.1**
+   
    ```bash
     sudo apt install php8.1-fpm
    ```
-6. Check PHP Status
+7. **Check PHP Status**
+   
    ```bash
     sudo systemctl status php8.1-fpm
    ```
+   
 ![alt text](image-2.png)
 
-Setup PHP pada nginx
+**Setup PHP pada nginx**
 
-7. Buka config nginx
+7. **Buka config nginx**
+   
    ```bash
    sudo nano /etc/nginx/sites-available/default
    ```
+   
 - Edit config menjadi seperti berikut
 
    - Add index.php to the index list.
@@ -236,28 +244,34 @@ Setup PHP pada nginx
    - Uncomment the section to deny all access to Apache .htaccess files.
    ![alt text](config.mp4)
 
-8. Restart nginx
+8. **Restart nginx**
+   
    ```bash
    sudo systemctl restart nginx
    ```
-9. Test PHP
+   
+10. **Test PHP**
 
    - Buat file PHP baru
-
-   - sudo nano /var/www/html/info.php
-
+     
+   ```bash
+   sudo nano /var/www/html/info.php
+   ```
+     
    - Pastekan script berikut
+     
    ```bash
    <?php phpinfo(); ?>
    ```
+
    - Buka pada web browser <IP ADDRESS>/info.php
 
    - Seharusnya akan tampil informasi PHP yang berjalan
    ![alt text](image-3.png)
 
-Setup Web Demo
+**Setup Web Demo**
 
-10. Mendapatkan index.php ke html menggunakan git
+10. **Cara 1: Mendapatkan index.php ke html menggunakan git**
    ```bash
    sudo apt install git
    ```
@@ -271,52 +285,64 @@ Setup Web Demo
 
 Seharusnya, ketika alamat IP dibuka pada web browser akan sudah tertampil website demonya
 
-- Cara 2
+- **Cara 2**
+  
    ```bash
    cd /var/www/html
    ```
-  - masuk ke https://github.com/Rizqirazkafi/testing-website/blob/index.php dan copy index.php
+  - masuk ke https://github.com/Rizqirazkafi/testing-website dan copy isi src code index.php
   - pastekan disini
+    
    ```bash
    sudo nano index.php
    ```
 
-Setup SSL
+**Setup SSL**
 
-11. Install mkcert
+11. **Install mkcert**
+    
    ```bash
    sudo apt install mkcert
    ```
-12. Buat certificate untuk localhost
+
+12.** Buat certificate untuk localhost**
+
    ```bash
    mkcert localhost
    ```
-13. Pindahkan certificate dan key
+
+13. **Pindahkan certificate dan key**
    ```bash
    sudo mv localhost.pem /etc/ssl/certs
    sudo mv localhost-key.pem /etc/ssl/private
    ```
-14. Konfigurasi nginx
+
+14. **Konfigurasi nginx**
 
    - Buka file konfigurasi nginx
+     
       ```bash
       sudo nano /etc/nginx/sites-available/default
       ```
+      
    - Tambahkan config berikut
+     
       ```
       listen 443 ssl default_server;
       listen [::]:443 ssl default_server;
       ssl_certificate /etc/ssl/certs/localhost.pem;
       ssl_certificate_key /etc/ssl/private/localhost-key.pem;
       ```
+      
    ![alt text](image-4.png)
 
-15. Restart nginx
+15. **Restart nginx**
+    
    ```bash
    sudo systemctl restart nginx
    ```
 
-16. Buka alamat IP pada web browser dengan menambahkan https
+16. **Buka alamat IP pada web browser dengan menambahkan https**
    - ex: https://<IP ADDRESS>
 
    - Jika terdapat pesan warning, pilih advance kemudian pilih proceed to
@@ -325,7 +351,7 @@ Setup SSL
 
    ![alt text](image-5.png)
 
-17. Web sudah berjalan pada protokol https
+17.** Web sudah berjalan pada protokol https**
    ![alt text](image-6.png)
 
 ### WEB SERVER APACHE2
