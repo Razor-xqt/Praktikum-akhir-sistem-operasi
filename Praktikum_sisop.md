@@ -125,7 +125,6 @@
 3. **Buat file 'guest', setting kepemilikan ke guest, dan lakukan ACL (*Access Control List*) pada user guest:**
    
    ```bash
-   sudo mkdir /home/guest
    sudo chown guest:guest /home/guest
    sudo chmod 750 /home/guest
    ```
@@ -158,32 +157,43 @@
    ```bash
    sudo /etc/ssh/sshd_config
    ```
+- tambahkan konfigurasi ini dipaling bawah:
+   ```
+   Match User guest
+      ChrootDirectory /home
+      AllowTcpForwarding no
+      X11Forwarding no
+   ```
 
-6. **Restart ssh:**
+5. **Restart ssh:**
    
    ```bash
    sudo systemctl restart ssh
    ```
 
-7. **Verifikasi status ssh:**
+6. **Verifikasi status ssh:**
    
    ```bash
    sudo systemctl status ssh
    ```
 
-3. **Tes akses direktori home dan guest:**
+7. **Tes akses direktori home dan guest:**
    
    ```bash
    cd /home/guest
    nano test.txt
    ls
    ```
-4.  **Tes akses diluar direktori home:**
+
+8.  **Tes akses diluar direktori home:**
+   
    misal kita test ke folder
+
    ```bash
    cd /media
    nano
    ```
+
    jika tulisan *unwritable* maka perizinan telah berhasil
 
 ## Langkah 4: Setup Web Server dengan HTTPS (pilih salah satu web server)
@@ -196,17 +206,21 @@
    ```bash
    sudo apt install nginx
    ```
+
 2. **Start nginx**
    
    ```bash
    sudo systemctl start nginx
    ```
+
 3. **Check nginx**
    
    ```bash
    sudo systemctl status nginx
    ```
+
 4. **Seharusnya terdapat status active (running)**
+   
    ![alt text](image.png)
    Dan jika diakses alamat ip nya akan ada website yang muncul
    ![alt text](image-1.png)
@@ -214,27 +228,28 @@
 
 **Instalasi PHP**
 
-5. **Install PHP FPM 8.1**
+1. **Install PHP FPM 8.1**
    
    ```bash
     sudo apt install php8.1-fpm
    ```
-7. **Check PHP Status**
+
+2. **Check PHP Status**
    
    ```bash
     sudo systemctl status php8.1-fpm
    ```
-   
+
 ![alt text](image-2.png)
 
 **Setup PHP pada nginx**
 
-7. **Buka config nginx**
+1. **Buka config nginx**
    
    ```bash
    sudo nano /etc/nginx/sites-available/default
    ```
-   
+
 - Edit config menjadi seperti berikut
 
    - Add index.php to the index list.
@@ -244,26 +259,23 @@
    - Uncomment the section to deny all access to Apache .htaccess files.
    ![alt text](config.mp4)
 
-8. **Restart nginx**
+2. **Restart nginx**
    
    ```bash
    sudo systemctl restart nginx
    ```
-   
-10. **Test PHP**
+
+3. **Test PHP**
 
    - Buat file PHP baru
-     
    ```bash
    sudo nano /var/www/html/info.php
    ```
-     
+
    - Pastekan script berikut
-     
    ```bash
    <?php phpinfo(); ?>
    ```
-
    - Buka pada web browser <IP ADDRESS>/info.php
 
    - Seharusnya akan tampil informasi PHP yang berjalan
@@ -271,14 +283,17 @@
 
 **Setup Web Demo**
 
-10. **Cara 1: Mendapatkan index.php ke html menggunakan git**
+1.  **Mendapatkan index.php ke html menggunakan git**
+   
    ```bash
    sudo apt install git
    ```
+
    - Clone repository
    ```bash
     git clone https://github.com/Rizqirazkafi/testing-website.git
    ```
+
    - Pindahkan index.php ke folder /var/www/html/
 
    - sudo mv testing-website/index.php /var/www/html/
@@ -286,63 +301,54 @@
 Seharusnya, ketika alamat IP dibuka pada web browser akan sudah tertampil website demonya
 
 - **Cara 2**
-  
    ```bash
    cd /var/www/html
    ```
-  - masuk ke https://github.com/Rizqirazkafi/testing-website dan copy isi src code index.php
+
+  - masuk ke https://github.com/Rizqirazkafi/testing-website/blob/index.php dan copy index.php
   - pastekan disini
-    
    ```bash
    sudo nano index.php
    ```
 
 **Setup SSL**
 
-11. **Install mkcert**
-    
+1. **Install mkcert**
    ```bash
    sudo apt install mkcert
    ```
-
-12.** Buat certificate untuk localhost**
-
+2. **Buat certificate untuk localhost**
    ```bash
    mkcert localhost
    ```
-
-13. **Pindahkan certificate dan key**
+3. **Pindahkan certificate dan key**
    ```bash
    sudo mv localhost.pem /etc/ssl/certs
    sudo mv localhost-key.pem /etc/ssl/private
    ```
-
-14. **Konfigurasi nginx**
+4. **Konfigurasi nginx**
 
    - Buka file konfigurasi nginx
-     
       ```bash
       sudo nano /etc/nginx/sites-available/default
       ```
-      
+
    - Tambahkan config berikut
-     
       ```
       listen 443 ssl default_server;
       listen [::]:443 ssl default_server;
       ssl_certificate /etc/ssl/certs/localhost.pem;
       ssl_certificate_key /etc/ssl/private/localhost-key.pem;
       ```
-      
+
    ![alt text](image-4.png)
 
-15. **Restart nginx**
-    
+5. **Restart nginx**
    ```bash
    sudo systemctl restart nginx
    ```
 
-16. **Buka alamat IP pada web browser dengan menambahkan https**
+6. **Buka alamat IP pada web browser dengan menambahkan https**
    - ex: https://<IP ADDRESS>
 
    - Jika terdapat pesan warning, pilih advance kemudian pilih proceed to
@@ -351,10 +357,10 @@ Seharusnya, ketika alamat IP dibuka pada web browser akan sudah tertampil websit
 
    ![alt text](image-5.png)
 
-17.** Web sudah berjalan pada protokol https**
+7. **Web sudah berjalan pada protokol https**
    ![alt text](image-6.png)
 
-### B. WEB SERVER APACHE2 (masih perkembangan untuk ssl)
+### WEB SERVER APACHE2 (Masih perkembangan)
 
 1. **install apache2:**
    
@@ -370,14 +376,14 @@ Seharusnya, ketika alamat IP dibuka pada web browser akan sudah tertampil websit
    ls
    ```
 
-3. **Test website html dengan local host**
+3.  **Test website html dengan local host:**
    
    ```bash
    firefox index.html
    ```
    https://index.html (ubah menjadi) 127.0.0.1/index.html
 
-4. **Ambil (copy) Website php:**
+4.  **Ambil (copy) Website php:**
    
    github.com/Rizkirazkafi/testing-website
 
@@ -433,7 +439,7 @@ Seharusnya, ketika alamat IP dibuka pada web browser akan sudah tertampil websit
    
 ## Langkah 5: Setup Storage Utama dan Backup Storage Server
 
-note: jika menggunakan virtual box tambahkan disk di setting; Storage dan tambahkan 2 disk berukuran 5gb atau 10gb
+note: jika menggunakan virtual box tambahkan disk di setting tambahkan 2 disk berukuran 10gb
 
 1. **Cek disk yang tersedia:**
    ```bash
@@ -532,7 +538,17 @@ note: jika menggunakan virtual box tambahkan disk di setting; Storage dan tambah
   ls /mnt/backup
   ```
 
-9. **Jika gagal gunakan perintah ini untuk menghapus partisi:**
+- jika index.php hilang tambahkan lagi pada /var/www/html/
+  
+   ```bash
+   cd /var/www/html
+   ```
+   - masuk ke github: https://github.com/Rizkirazkafi/testing-website lalu copy dan pastekan di direktori /var/www/html
+   ```bash
+   sudo nano index.php
+   ```
+
+**Jika gagal gunakan perintah ini untuk menghapus partisi:**
     
 -  Sebelum itu unmount terlebih  dahulu
 
@@ -548,9 +564,3 @@ note: jika menggunakan virtual box tambahkan disk di setting; Storage dan tambah
 
 - tekan 'd' lalu enter untuk menghapus partisi
 - tekan 'w' lalu enter untuk write dan keluar
-
-
-
-
-
-   
