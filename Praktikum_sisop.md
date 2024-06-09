@@ -349,7 +349,7 @@ Seharusnya, ketika alamat IP dibuka pada web browser akan sudah tertampil websit
    ```
 
 6. **Buka alamat IP pada web browser dengan menambahkan https**
-   - ex: https://<IP ADDRESS>
+   - ex: https://IP ADDRESS
 
    - Jika terdapat pesan warning, pilih advance kemudian pilih proceed to
 
